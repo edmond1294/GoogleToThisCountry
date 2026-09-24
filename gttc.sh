@@ -33,9 +33,9 @@ show_banner() {
     echo -e "${CYAN}+-------------------------------------------------------+${NC}"
     echo ""
     echo -e "   ${BLUE}██████${NC}   ${RED}██████${NC}   ${YELLOW}██████${NC}   ${BLUE}██████${NC}    ${GREEN}██${NC}      ${RED}██████${NC}"
-    echo -e "  ${BLUE}██${NC}        ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██${NC}         ${GREEN}██${NC}      ${RED}██${NC}"
-    echo -e "  ${BLUE}██   ███${NC}  ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██   ███${NC}   ${GREEN}██${NC}      ${RED}██████${NC}"
-    echo -e "  ${BLUE}██    ██${NC}  ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██    ██${NC}   ${GREEN}██${NC}      ${RED}██${NC}"
+    echo -e "  ${BLUE}██${NC}        ${RED}██  ██${NC}   ${YELLOW}██  ██${NC}  ${BLUE}██${NC}         ${GREEN}██${NC}      ${RED}██${NC}"
+    echo -e "  ${BLUE}██   ███${NC}  ${RED}██  ██${NC}   ${YELLOW}██  ██${NC}  ${BLUE}██   ███${NC}   ${GREEN}██${NC}      ${RED}██████${NC}"
+    echo -e "  ${BLUE}██    ██${NC}  ${RED}██  ██${NC}   ${YELLOW}██  ██${NC}  ${BLUE}██    ██${NC}   ${GREEN}██${NC}      ${RED}██${NC}"
     echo -e "   ${BLUE}██████${NC}   ${RED}██████${NC}   ${YELLOW}██████${NC}   ${BLUE}██████${NC}    ${GREEN}███████${NC} ${RED}██████${NC}"
     echo ""
 }
