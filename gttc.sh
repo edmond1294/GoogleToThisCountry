@@ -23,16 +23,16 @@ CONFIG_TAG_FILE="/etc/gttc_country.conf"
 
 show_banner() {
     clear
-    echo -e "${CYAN}╔═══════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║${NC}         GoogleToThisCountry (GTTC) 管理脚本          ${CYAN}║${NC}"
-    echo -e "${CYAN}║${NC}         官网: ${YELLOW}https://nekoqwq.com${NC}                     ${CYAN}║${NC}"
-    echo -e "${CYAN}╚═══════════════════════════════════════════════════════╝${NC}"
+    echo -e "${CYAN}+-------------------------------------------------------+${NC}"
+    echo -e "${CYAN}|         GoogleToThisCountry (GTTC) 管理脚本           |${NC}"
+    echo -e "${CYAN}|         官网: ${YELLOW}https://nekoqwq.com${CYAN}                     |${NC}"
+    echo -e "${CYAN}+-------------------------------------------------------+${NC}"
     echo ""
     echo -e "   ${BLUE}██████${NC}   ${RED}██████${NC}   ${YELLOW}██████${NC}   ${BLUE}██████${NC}   ${GREEN}██${NC}      ${RED}██████${NC}"
-    echo -e "  ${BLUE}██${NC}        ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██${NC}       ${GREEN}██${NC}      ${RED}██${NC}"
-    echo -e "  ${BLUE}██   ███${NC}  ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██   ███${NC}  ${GREEN}██${NC}      ${RED}█████${NC}"
-    echo -e "  ${BLUE}██    ██${NC}  ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██    ██${NC}  ${GREEN}██${NC}      ${RED}██${NC}"
-    echo -e "   ${BLUE}██████${NC}   ${RED}██████${NC}   ${YELLOW}██████${NC}   ${BLUE}██████${NC}   ${GREEN}███████${NC}  ${RED}██████${NC}"
+    echo -e "  ${BLUE}██${NC}        ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██${NC}         ${GREEN}██${NC}      ${RED}██${NC}"
+    echo -e "  ${BLUE}██   ███${NC}  ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██   ███${NC}   ${GREEN}██${NC}      ${RED}█████${NC}"
+    echo -e "  ${BLUE}██    ██${NC}  ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██    ██${NC}   ${GREEN}██${NC}      ${RED}██${NC}"
+    echo -e "   ${BLUE}██████${NC}   ${RED}██████${NC}   ${YELLOW}██████${NC}   ${BLUE}██████${NC}   ${GREEN}███████${NC} ${RED}██████${NC}"
     echo ""
 }
 
@@ -71,8 +71,8 @@ setup_shortcut() {
     SCRIPT_SOURCE="$0"
     if [ "$SCRIPT_SOURCE" = "bash" ] || [ "$SCRIPT_SOURCE" = "-bash" ] || [[ "$SCRIPT_SOURCE" == *"/dev/fd/"* ]] || [ "$SCRIPT_SOURCE" = "/dev/stdin" ]; then
         echo -e "${YELLOW}正在持久化安装脚本至 $LOCAL_SCRIPT ...${NC}"
-        curl -sSL "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry/main/gttc.sh" -o "$LOCAL_SCRIPT" || \
-        wget -qO "$LOCAL_SCRIPT" "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry/main/gttc.sh"
+        curl -sSL "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry-GTTC/main/gttc.sh" -o "$LOCAL_SCRIPT" || \
+        wget -qO "$LOCAL_SCRIPT" "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry-GTTC/main/gttc.sh"
     else
         if [ "$(readlink -f "$SCRIPT_SOURCE" 2>/dev/null)" != "$LOCAL_SCRIPT" ]; then
             cp -f "$(readlink -f "$SCRIPT_SOURCE")" "$LOCAL_SCRIPT" 2>/dev/null || true
