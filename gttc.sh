@@ -74,7 +74,7 @@ setup_shortcut() {
             cp -f "$(readlink -f "$0")" "$LOCAL_SCRIPT"
         else
             echo -e "${YELLOW}正在将脚本持久化安装至 $LOCAL_SCRIPT ...${NC}"
-            curl -sSL "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry/main/gttc.sh" -o "$LOCAL_SCRIPT"
+            curl -sSL "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry-GTGC/main/gttc.sh" -o "$LOCAL_SCRIPT"
         fi
         chmod +x "$LOCAL_SCRIPT"
     fi
