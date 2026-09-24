@@ -20,8 +20,6 @@ PING_SCRIPT="/usr/local/bin/gttc_ping.sh"
 SERVICE_FILE_SYSTEMD="/etc/systemd/system/gttc-ping.service"
 SERVICE_FILE_OPENRC="/etc/init.d/gttc-ping"
 CONFIG_TAG_FILE="/etc/gttc_country.conf"
-LOCAL_SCRIPT="/usr/local/bin/gttc_manager.sh"
-REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry/main/gttc.sh"
 
 show_banner() {
     clear
@@ -31,9 +29,9 @@ show_banner() {
     echo -e "${CYAN}+-------------------------------------------------------+${NC}"
     echo ""
     echo -e "   ${BLUE}██████${NC}   ${RED}██████${NC}   ${YELLOW}██████${NC}   ${BLUE}██████${NC}    ${GREEN}██${NC}      ${RED}██████${NC}"
-    echo -e "  ${BLUE}██${NC}        ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██${NC}         ${GREEN}██${NC}      ${RED}██${NC}"
-    echo -e "  ${BLUE}██   ███${NC}  ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██   ███${NC}   ${GREEN}██${NC}      ${RED}██████${NC}"
-    echo -e "  ${BLUE}██    ██${NC}  ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██    ██${NC}   ${GREEN}██${NC}      ${RED}██${NC}"
+    echo -e "  ${BLUE}██${NC}        ${RED}██  ██${NC}   ${YELLOW}██  ██${NC}  ${BLUE}██${NC}         ${GREEN}██${NC}      ${RED}██${NC}"
+    echo -e "  ${BLUE}██   ███${NC}  ${RED}██  ██${NC}   ${YELLOW}██  ██${NC}  ${BLUE}██   ███${NC}   ${GREEN}██${NC}      ${RED}██████${NC}"
+    echo -e "  ${BLUE}██    ██${NC}  ${RED}██  ██${NC}   ${YELLOW}██  ██${NC}  ${BLUE}██    ██${NC}   ${GREEN}██${NC}      ${RED}██${NC}"
     echo -e "   ${BLUE}██████${NC}   ${RED}██████${NC}   ${YELLOW}██████${NC}   ${BLUE}██████${NC}    ${GREEN}███████${NC} ${RED}██████${NC}"
     echo ""
 }
@@ -68,12 +66,13 @@ check_status() {
 
 setup_shortcut() {
     mkdir -p /usr/local/bin
+    LOCAL_SCRIPT="/usr/local/bin/gttc_manager.sh"
 
     SCRIPT_SOURCE="$0"
     if [ "$SCRIPT_SOURCE" = "bash" ] || [ "$SCRIPT_SOURCE" = "-bash" ] || [[ "$SCRIPT_SOURCE" == *"/dev/fd/"* ]] || [ "$SCRIPT_SOURCE" = "/dev/stdin" ]; then
         echo -e "${YELLOW}正在持久化安装脚本至 $LOCAL_SCRIPT ...${NC}"
-        curl -sSL "$REMOTE_SCRIPT_URL" -o "$LOCAL_SCRIPT" || \
-        wget -qO "$LOCAL_SCRIPT" "$REMOTE_SCRIPT_URL"
+        curl -sSL "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry/main/gttc.sh" -o "$LOCAL_SCRIPT" || \
+        wget -qO "$LOCAL_SCRIPT" "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry/main/gttc.sh"
     else
         if [ "$(readlink -f "$SCRIPT_SOURCE" 2>/dev/null)" != "$LOCAL_SCRIPT" ]; then
             cp -f "$(readlink -f "$SCRIPT_SOURCE")" "$LOCAL_SCRIPT" 2>/dev/null || true
@@ -444,21 +443,6 @@ with open(conf_path, 'w') as f:
     echo -e "${GREEN}✅ 已成功关闭重定向模式，恢复默认国际解析！${NC}"
 }
 
-update_script() {
-    echo -e "${YELLOW}正在从 GitHub 抓取最新脚本...${NC}"
-    rm -f "$LOCAL_SCRIPT"
-    if curl -sSL "$REMOTE_SCRIPT_URL" -o "$LOCAL_SCRIPT" || wget -qO "$LOCAL_SCRIPT" "$REMOTE_SCRIPT_URL"; then
-        chmod +x "$LOCAL_SCRIPT"
-        ln -sf "$LOCAL_SCRIPT" /usr/local/bin/gttc
-        chmod +x /usr/local/bin/gttc
-        echo -e "${GREEN}✅ 脚本更新成功！正在重新加载...${NC}"
-        sleep 1
-        exec bash "$LOCAL_SCRIPT"
-    else
-        echo -e "${RED}❌ 脚本下载失败，请检查网络连接！${NC}"
-    fi
-}
-
 show_menu() {
     show_banner
     echo "================================================="
@@ -468,12 +452,11 @@ show_menu() {
     echo -e " 1. ${GREEN}开启/切换 目标国家重定向 (多维发包 + EDNS 宣告)${NC}"
     echo -e " 2. ${RED}关闭重定向模式${NC}"
     echo -e " 3. ${YELLOW}一键安装/修复 核心服务与依赖环境${NC}"
-    echo -e " 4. ${CYAN}更新管理脚本${NC}"
     echo " 0. 退出脚本"
     echo "================================================="
     echo -e " 💡 提示：后续可在命令行直接输入 ${GREEN}gttc${NC} 呼出本菜单"
     echo "================================================="
-    read -p "请选择选项 [0-4]: " choice
+    read -p "请选择选项 [0-3]: " choice
 
     case "$choice" in
         1)
@@ -484,9 +467,6 @@ show_menu() {
             ;;
         3)
             install_core
-            ;;
-        4)
-            update_script
             ;;
         0)
             exit 0
