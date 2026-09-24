@@ -64,13 +64,20 @@ check_status() {
     fi
 }
 
+clean_old_scripts() {
+    echo -e "${YELLOW}正在清理旧版脚本文件...${NC}"
+    rm -f /usr/local/bin/gttc_manager.sh
+    rm -f /usr/local/bin/gttc
+}
+
 setup_shortcut() {
+    clean_old_scripts
     mkdir -p /usr/local/bin
     LOCAL_SCRIPT="/usr/local/bin/gttc_manager.sh"
 
     SCRIPT_SOURCE="$0"
     if [ "$SCRIPT_SOURCE" = "bash" ] || [ "$SCRIPT_SOURCE" = "-bash" ] || [[ "$SCRIPT_SOURCE" == *"/dev/fd/"* ]] || [ "$SCRIPT_SOURCE" = "/dev/stdin" ]; then
-        echo -e "${YELLOW}正在持久化安装脚本至 $LOCAL_SCRIPT ...${NC}"
+        echo -e "${YELLOW}正在下载并更新最新脚本至 $LOCAL_SCRIPT ...${NC}"
         curl -sSL "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry/main/gttc.sh" -o "$LOCAL_SCRIPT" || \
         wget -qO "$LOCAL_SCRIPT" "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry/main/gttc.sh"
     else
@@ -342,7 +349,7 @@ enable_target_country() {
         5)
             COUNTRY_NAME="🇺🇸 美国"
             DOH_SERVER="https://dns.google/dns-query"
-            ECS_IP="8.8.8.8/24"
+            ECS_IP="64.233.160.0/24"
             LANG_HEADER="en-US,en;q=0.9"
             ;;
         *)
