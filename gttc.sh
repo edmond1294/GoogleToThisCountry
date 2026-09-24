@@ -1,7 +1,6 @@
 #!/bin/bash
 # =========================================================
 # GoogleToThisCountry (GTTC) 管理脚本
-# 官网: https://nekoqwq.com
 # 支持国家/地区: 🇹🇼 台湾 | 🇨🇳 中国大陆 | 🇯🇵 日本 | 🇲🇴 澳门 | 🇺🇸 美国
 # 快捷指令: gttc
 # =========================================================
@@ -21,11 +20,20 @@ SERVICE_FILE_SYSTEMD="/etc/systemd/system/gttc-ping.service"
 SERVICE_FILE_OPENRC="/etc/init.d/gttc-ping"
 CONFIG_TAG_FILE="/etc/gttc_country.conf"
 
+check_warp() {
+    local ip
+    ip=$(curl -s4 --connect-timeout 5 https://api.ipify.org 2>/dev/null || curl -s4 --connect-timeout 5 https://ifconfig.me 2>/dev/null || echo "")
+    if [[ "$ip" =~ ^104\.28\. ]]; then
+        echo -e "${RED}[⚠️ 错误] 检测到当前处于 Cloudflare WARP 环境 (IP: $ip)！${NC}"
+        echo -e "${RED}[⚠️ 提示] 本脚本不支持在 WARP 环境下运行，脚本将自动退出。${NC}"
+        exit 1
+    fi
+}
+
 show_banner() {
     clear
     echo -e "${CYAN}+-------------------------------------------------------+${NC}"
     echo -e "${CYAN}|         GoogleToThisCountry (GTTC) 管理脚本           |${NC}"
-    echo -e "${CYAN}|         官网: ${YELLOW}https://www.nekoqwq.com${CYAN}                 |${NC}"
     echo -e "${CYAN}+-------------------------------------------------------+${NC}"
     echo ""
     echo -e "   ${BLUE}██████${NC}   ${RED}██████${NC}   ${YELLOW}██████${NC}   ${BLUE}██████${NC}    ${GREEN}██${NC}      ${RED}██████${NC}"
@@ -121,6 +129,12 @@ endpoints=(
 )
 
 while true; do
+    ip=\$(curl -s4 --connect-timeout 5 https://api.ipify.org 2>/dev/null || curl -s4 --connect-timeout 5 https://ifconfig.me 2>/dev/null || echo "")
+    if [[ "\$ip" =~ ^104\.28\. ]]; then
+        echo "Detected WARP environment (\$ip), stopping services."
+        exit 1
+    fi
+
     for url in "\${endpoints[@]}"; do
         curl -s -A "\$UA_MOBILE" \\
              -H "Accept-Language: ${lang_header}" \\
@@ -129,8 +143,7 @@ while true; do
              "\$url" >/dev/null 2>&1 || true
     done
 
-    SLEEP_TIME=\$((120 + RANDOM % 180))
-    sleep \$SLEEP_TIME
+    sleep 600
 done
 EOF
     chmod +x "$PING_SCRIPT"
@@ -444,6 +457,7 @@ with open(conf_path, 'w') as f:
 }
 
 show_menu() {
+    check_warp
     show_banner
     echo "================================================="
     echo -e "       GoogleToThisCountry (GTTC) 管理脚本   "
@@ -478,5 +492,6 @@ show_menu() {
     esac
 }
 
+check_warp
 install_core
 show_menu
