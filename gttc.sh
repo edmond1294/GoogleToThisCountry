@@ -1,6 +1,7 @@
 #!/bin/bash
 # =========================================================
 # GoogleToThisCountry (GTTC) 管理脚本
+# 官网: https://nekoqwq.com
 # 支持国家/地区: 🇹🇼 台湾 | 🇨🇳 中国大陆 | 🇯🇵 日本 | 🇲🇴 澳门 | 🇺🇸 美国
 # 快捷指令: gttc
 # =========================================================
@@ -23,14 +24,15 @@ CONFIG_TAG_FILE="/etc/gttc_country.conf"
 show_banner() {
     clear
     echo -e "${CYAN}╔═══════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║              GoogleToThisCountry (GTTC)               ║${NC}"
+    echo -e "${CYAN}║${NC}         GoogleToThisCountry (GTTC) 管理脚本          ${CYAN}║${NC}"
+    echo -e "${CYAN}║${NC}         官网: ${YELLOW}https://nekoqwq.com${NC}                     ${CYAN}║${NC}"
     echo -e "${CYAN}╚═══════════════════════════════════════════════════════╝${NC}"
     echo ""
-    echo -e "  ${BLUE}██████${NC}  ${RED}████████${NC}  ${YELLOW}████████${NC}  ${GREEN}██████${NC}"
-    echo -e " ${BLUE}██${NC}          ${RED}██${NC}         ${YELLOW}██${NC}     ${GREEN}██${NC}"
-    echo -e " ${BLUE}██   ███${NC}    ${RED}██${NC}         ${YELLOW}██${NC}     ${GREEN}██${NC}"
-    echo -e " ${BLUE}██    ██${NC}    ${RED}██${NC}         ${YELLOW}██${NC}     ${GREEN}██${NC}"
-    echo -e "  ${BLUE}██████${NC}     ${RED}██${NC}         ${YELLOW}██${NC}      ${GREEN}██████${NC}"
+    echo -e "   ${BLUE}██████${NC}   ${RED}██████${NC}   ${YELLOW}██████${NC}   ${BLUE}██████${NC}   ${GREEN}██${NC}      ${RED}██████${NC}"
+    echo -e "  ${BLUE}██${NC}        ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██${NC}       ${GREEN}██${NC}      ${RED}██${NC}"
+    echo -e "  ${BLUE}██   ███${NC}  ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██   ███${NC}  ${GREEN}██${NC}      ${RED}█████${NC}"
+    echo -e "  ${BLUE}██    ██${NC}  ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██    ██${NC}  ${GREEN}██${NC}      ${RED}██${NC}"
+    echo -e "   ${BLUE}██████${NC}   ${RED}██████${NC}   ${YELLOW}██████${NC}   ${BLUE}██████${NC}   ${GREEN}███████${NC}  ${RED}██████${NC}"
     echo ""
 }
 
@@ -69,8 +71,8 @@ setup_shortcut() {
     SCRIPT_SOURCE="$0"
     if [ "$SCRIPT_SOURCE" = "bash" ] || [ "$SCRIPT_SOURCE" = "-bash" ] || [[ "$SCRIPT_SOURCE" == *"/dev/fd/"* ]] || [ "$SCRIPT_SOURCE" = "/dev/stdin" ]; then
         echo -e "${YELLOW}正在持久化安装脚本至 $LOCAL_SCRIPT ...${NC}"
-        curl -sSL "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry-GTTC/main/gttc.sh" -o "$LOCAL_SCRIPT" || \
-        wget -qO "$LOCAL_SCRIPT" "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry-GTTC/main/gttc.sh"
+        curl -sSL "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry/main/gttc.sh" -o "$LOCAL_SCRIPT" || \
+        wget -qO "$LOCAL_SCRIPT" "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry/main/gttc.sh"
     else
         if [ "$(readlink -f "$SCRIPT_SOURCE" 2>/dev/null)" != "$LOCAL_SCRIPT" ]; then
             cp -f "$(readlink -f "$SCRIPT_SOURCE")" "$LOCAL_SCRIPT" 2>/dev/null || true
@@ -283,12 +285,13 @@ CONF_EOF
 
 restart_service() {
     local action="$1"
+    echo -e "${YELLOW}正在重启相关服务...${NC}"
     if command -v rc-service >/dev/null 2>&1 || [ -f /etc/alpine-release ]; then
         rc-service xray $action 2>/dev/null || true
         rc-service gttc-ping $action 2>/dev/null || true
     else
         systemctl $action xray 2>/dev/null || systemctl $action v2ray 2>/dev/null || true
-        if [ "$action" = "start" ]; then
+        if [ "$action" = "restart" ] || [ "$action" = "start" ]; then
             systemctl enable gttc-ping.service >/dev/null 2>&1 || true
             systemctl restart gttc-ping.service >/dev/null 2>&1 || true
         else
@@ -397,10 +400,10 @@ with open(conf_path, 'w') as f:
 
     create_ping_service "$LANG_HEADER"
     echo "$COUNTRY_NAME" > "$CONFIG_TAG_FILE"
-    restart_service "start"
+    restart_service "restart"
 
     echo -e "${GREEN}✅ 已成功开启 Google 定位重定向 -> [${COUNTRY_NAME}]！${NC}"
-    echo -e "${GREEN}✅ 后台多维保活发包服务已启动。${NC}"
+    echo -e "${GREEN}✅ 核心服务已重新加载配置，后台保活服务已启动。${NC}"
 }
 
 disable_target_country() {
