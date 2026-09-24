@@ -1,8 +1,8 @@
 # GoogleToThisCountry (GTTC)
 
 <p align="center">
-  <a href="https://nekoqwq.com">
-    <img src="https://img.shields.io/badge/官网-nekoqwq.com-blue?style=for-the-badge&logo=google-chrome" alt="官网">
+  <a href="https://www.nekoqwq.com">
+    <img src="https://img.shields.io/badge/官网-www.nekoqwq.com-blue?style=for-the-badge&logo=google-chrome" alt="官网">
   </a>
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/Shell-Bash-orange?style=for-the-badge&logo=gnu-bash" alt="Bash">
