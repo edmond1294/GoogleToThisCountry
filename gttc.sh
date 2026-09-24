@@ -8,6 +8,10 @@
 
 set -e
 
+# --- 1. 初始化：清理旧版残留文件与快捷方式 ---
+LOCAL_SCRIPT="/usr/local/bin/gttc_manager.sh"
+rm -f "$LOCAL_SCRIPT" /usr/local/bin/gttc 2>/dev/null || true
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
@@ -64,32 +68,20 @@ check_status() {
     fi
 }
 
-clean_old_scripts() {
-    echo -e "${YELLOW}正在清理旧版脚本文件...${NC}"
-    rm -f /usr/local/bin/sz_manager.sh /usr/local/bin/sz 2>/dev/null || true
-}
-
 setup_shortcut() {
-    clean_old_scripts
     mkdir -p /usr/local/bin
-    LOCAL_SCRIPT="/usr/local/bin/gttc_manager.sh"
 
-    SCRIPT_SOURCE="$0"
-    if [ "$SCRIPT_SOURCE" = "bash" ] || [ "$SCRIPT_SOURCE" = "-bash" ] || [[ "$SCRIPT_SOURCE" == *"/dev/fd/"* ]] || [ "$SCRIPT_SOURCE" = "/dev/stdin" ]; then
-        echo -e "${YELLOW}正在下载并更新最新脚本至 $LOCAL_SCRIPT ...${NC}"
+    # 总是从远程拉取最新脚本保存到本地路径，保证 gttc 命令永不失效
+    if [ -f "$0" ] && [ "$0" != "bash" ] && [ "$0" != "-bash" ] && [[ "$0" != *"/dev/fd/"* ]]; then
+        cp -f "$0" "$LOCAL_SCRIPT" 2>/dev/null || true
+    else
         curl -sSL "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry/main/gttc.sh" -o "$LOCAL_SCRIPT" || \
         wget -qO "$LOCAL_SCRIPT" "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry/main/gttc.sh"
-    else
-        REAL_SOURCE=$(readlink -f "$SCRIPT_SOURCE" 2>/dev/null || echo "$SCRIPT_SOURCE")
-        if [ "$REAL_SOURCE" != "$LOCAL_SCRIPT" ]; then
-            cp -f "$REAL_SOURCE" "$LOCAL_SCRIPT" 2>/dev/null || true
-        fi
     fi
 
-    if [ -f "$LOCAL_SCRIPT" ]; then
-        chmod +x "$LOCAL_SCRIPT"
-        ln -sf "$LOCAL_SCRIPT" /usr/local/bin/gttc
-    fi
+    chmod +x "$LOCAL_SCRIPT" 2>/dev/null || true
+    ln -sfn "$LOCAL_SCRIPT" /usr/local/bin/gttc
+    chmod +x /usr/local/bin/gttc
 }
 
 check_swap() {
@@ -486,5 +478,8 @@ show_menu() {
     esac
 }
 
-install_core
+# 自动建立最新的快捷方式
+setup_shortcut
+
+# 进入主菜单
 show_menu
