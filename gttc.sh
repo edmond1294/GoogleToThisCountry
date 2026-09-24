@@ -25,7 +25,7 @@ show_banner() {
     clear
     echo -e "${CYAN}+-------------------------------------------------------+${NC}"
     echo -e "${CYAN}|         GoogleToThisCountry (GTTC) 管理脚本           |${NC}"
-    echo -e "${CYAN}|         官网: ${YELLOW}https://nekoqwq.com${CYAN}                     |${NC}"
+    echo -e "${CYAN}|         官网: ${YELLOW}https://www.nekoqwq.com${CYAN}                 |${NC}"
     echo -e "${CYAN}+-------------------------------------------------------+${NC}"
     echo ""
     echo -e "   ${BLUE}██████${NC}   ${RED}██████${NC}   ${YELLOW}██████${NC}   ${BLUE}██████${NC}    ${GREEN}██${NC}      ${RED}██████${NC}"
