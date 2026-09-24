@@ -29,9 +29,9 @@ show_banner() {
     echo -e "${CYAN}+-------------------------------------------------------+${NC}"
     echo ""
     echo -e "   ${BLUE}██████${NC}   ${RED}██████${NC}   ${YELLOW}██████${NC}   ${BLUE}██████${NC}    ${GREEN}██${NC}      ${RED}██████${NC}"
-    echo -e "  ${BLUE}██${NC}        ${RED}██  ██${NC}   ${YELLOW}██  ██${NC}  ${BLUE}██${NC}         ${GREEN}██${NC}      ${RED}██${NC}"
-    echo -e "  ${BLUE}██   ███${NC}  ${RED}██  ██${NC}   ${YELLOW}██  ██${NC}  ${BLUE}██   ███${NC}   ${GREEN}██${NC}      ${RED}██████${NC}"
-    echo -e "  ${BLUE}██    ██${NC}  ${RED}██  ██${NC}   ${YELLOW}██  ██${NC}  ${BLUE}██    ██${NC}   ${GREEN}██${NC}      ${RED}██${NC}"
+    echo -e "  ${BLUE}██${NC}        ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██${NC}         ${GREEN}██${NC}      ${RED}██${NC}"
+    echo -e "  ${BLUE}██   ███${NC}  ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██   ███${NC}   ${GREEN}██${NC}      ${RED}██████${NC}"
+    echo -e "  ${BLUE}██    ██${NC}  ${RED}██  ██${NC}  ${YELLOW}██  ██${NC}  ${BLUE}██    ██${NC}   ${GREEN}██${NC}      ${RED}██${NC}"
     echo -e "   ${BLUE}██████${NC}   ${RED}██████${NC}   ${YELLOW}██████${NC}   ${BLUE}██████${NC}    ${GREEN}███████${NC} ${RED}██████${NC}"
     echo ""
 }
@@ -66,8 +66,7 @@ check_status() {
 
 clean_old_scripts() {
     echo -e "${YELLOW}正在清理旧版脚本文件...${NC}"
-    rm -f /usr/local/bin/gttc_manager.sh
-    rm -f /usr/local/bin/gttc
+    rm -f /usr/local/bin/sz_manager.sh /usr/local/bin/sz 2>/dev/null || true
 }
 
 setup_shortcut() {
@@ -81,14 +80,16 @@ setup_shortcut() {
         curl -sSL "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry/main/gttc.sh" -o "$LOCAL_SCRIPT" || \
         wget -qO "$LOCAL_SCRIPT" "https://raw.githubusercontent.com/edmond1294/GoogleToThisCountry/main/gttc.sh"
     else
-        if [ "$(readlink -f "$SCRIPT_SOURCE" 2>/dev/null)" != "$LOCAL_SCRIPT" ]; then
-            cp -f "$(readlink -f "$SCRIPT_SOURCE")" "$LOCAL_SCRIPT" 2>/dev/null || true
+        REAL_SOURCE=$(readlink -f "$SCRIPT_SOURCE" 2>/dev/null || echo "$SCRIPT_SOURCE")
+        if [ "$REAL_SOURCE" != "$LOCAL_SCRIPT" ]; then
+            cp -f "$REAL_SOURCE" "$LOCAL_SCRIPT" 2>/dev/null || true
         fi
     fi
 
-    chmod +x "$LOCAL_SCRIPT" 2>/dev/null || true
-    ln -sf "$LOCAL_SCRIPT" /usr/local/bin/gttc
-    chmod +x /usr/local/bin/gttc
+    if [ -f "$LOCAL_SCRIPT" ]; then
+        chmod +x "$LOCAL_SCRIPT"
+        ln -sf "$LOCAL_SCRIPT" /usr/local/bin/gttc
+    fi
 }
 
 check_swap() {
