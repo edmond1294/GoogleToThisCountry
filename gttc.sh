@@ -24,7 +24,7 @@ CONFIG_TAG_FILE="/etc/gttc_country.conf"
 show_banner() {
     clear
     echo -e "${CYAN}+-------------------------------------------------------+${NC}"
-    echo -e "${CYAN}|         GoogleToThisCountry (GTTC) 管理脚本           |${NC}"
+    echo -e "${CYAN}|         GoogleToThisCountry (GTTC) 管理脚本            |${NC}"
     echo -e "${CYAN}|         官网: ${YELLOW}https://nekoqwq.com${CYAN}                     |${NC}"
     echo -e "${CYAN}+-------------------------------------------------------+${NC}"
     echo ""
